@@ -1,5 +1,5 @@
 /*
-CppGenerator.hpp
+PythonGenerator.hpp
 */
 
 #pragma once
@@ -11,12 +11,35 @@ namespace generator
 
     class PythonGenerator : public CodeGenerator {
     public:
-        std::string generateClassCode(const uml::UmlClass& uml_class) const override {
-            std::string code = "class " + uml_class.class_name + ":\n";
-            // ... (tutaj Twoja pętla for po atrybutach i metodach dla C++) ...
-            code += "\n";
-            return code;
+        PythonGenerator() {
+            class_start_char = ":\n";
+            class_end_char = "";  
+            line_start_char = "    ";   
+            line_end_char = "\n";   
+        }
+    protected:
+        std::string formatClassStart(const std::string& name) const override {
+            return "class " + name;
+        }
+
+        std::string formatVisibilitySection(const std::string& visibility) const override {
+            return "";
+        }
+
+        std::string formatAttribute(const uml::UmlAttribute& attr) const override {
+            return attr.name + ": " + attr.type;
+        }
+
+        std::string formatMethod(const uml::UmlMethod& method) const override {
+            std::string methodCode = "def " + method.name + "()" + ": " + method.type;
+            // methodCode += " {\n";
+            // methodCode += "\t\t// implementation\n";
+            // methodCode += "\t}\n";
+            return methodCode;
+        }
+
+        std::string formatClassEnd() const override {
+            return ""; 
         }
     };
-
 } // namespace generator

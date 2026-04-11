@@ -11,11 +11,34 @@ namespace generator
 
     class CppGenerator : public CodeGenerator {
     public:
-        std::string generateClassCode(const uml::UmlClass& uml_class) const override {
-            std::string code = "class " + uml_class.class_name + " {\n";
-            // ... (tutaj Twoja pętla for po atrybutach i metodach dla C++) ...
-            code += "};\n";
-            return code;
+        CppGenerator() {
+            class_start_char = " {\n";
+            class_end_char = "};\n";  
+            line_end_char = ";\n";   
+        }
+    protected:
+        std::string formatClassStart(const std::string& name) const override {
+            return "class " + name;
+        }
+
+        std::string formatVisibilitySection(const std::string& visibility) const override {
+            return visibility + ":\n";
+        }
+
+        std::string formatAttribute(const uml::UmlAttribute& attr) const override {
+            return attr.type + " " + attr.name;
+        }
+
+        std::string formatMethod(const uml::UmlMethod& method) const override {
+            std::string methodCode = method.type + " " + method.name + "()";
+            // methodCode += " {\n";
+            // methodCode += "\t\t// implementation\n";
+            // methodCode += "\t}\n";
+            return methodCode;
+        }
+
+        std::string formatClassEnd() const override {
+            return ""; 
         }
     };
 

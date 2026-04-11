@@ -20,6 +20,7 @@ set(HEADERS
     src/Core/Refiner/UmlRefiner.hpp
     src/Core/CodeGenerator/CodeGenerator.hpp
     src/Core/CodeGenerator/generators/CppGenerator.hpp
+    src/Core/CodeGenerator/generators/PythonGenerator.hpp
 )
 
 set(SOURCES
@@ -28,7 +29,7 @@ set(SOURCES
     src/Core/UmlModel/UmlAttribute.cpp
     src/Core/UmlModel/UmlMethod.cpp
     src/Core/Refiner/UmlRefiner.cpp
-    # src/Core/CodeGenerator/CodeGenerator.cpp
+    src/Core/CodeGenerator/CodeGenerator.cpp
     # src/Core/CodeGenerator/generators/CppGenerator.cpp
     # src/transformations/TransformationEngine.cpp
 )
