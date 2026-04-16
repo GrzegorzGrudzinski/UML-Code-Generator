@@ -1,3 +1,7 @@
+/*
+    UmlClass.cpp
+*/
+
 #include "UmlClass.hpp"
 #include "UmlAttribute.hpp"
 #include "UmlMethod.hpp"   

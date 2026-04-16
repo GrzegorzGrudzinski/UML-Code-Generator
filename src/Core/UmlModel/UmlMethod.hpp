@@ -1,3 +1,7 @@
+/*
+UmlMethod.hpp
+*/
+
 #pragma once
 
 #include <string>
@@ -21,10 +25,13 @@ namespace uml {
         std::string type;
         std::string name;
         
-        bool isConstructor; // private ??
+        bool isConstructor = false; 
+        bool isStatic = false;
+        bool isAbstract = false;
         std::vector<UmlParameter> parameters;
-
+        
         UmlMethod(std::string v, std::string s, std::string n)
             : visibility(std::move(v)), type(std::move(s)), name(std::move(n)) {}
+        // void Add
     };
 }

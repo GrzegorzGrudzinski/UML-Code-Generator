@@ -11,36 +11,50 @@
 using namespace uml;
 
 int main() {
-    // 1. Użytkownik "rysuje" klasę
+    // 1. Create class
     UmlClass myClass("moja_klasa");
 
-    UmlAttribute attribute("public", "int", "moja_zmienna");
+    UmlAttribute attribute("public", "int", "moja_zmienna1");
     attribute.generateGetter = true;
     attribute.generateSetter = true;
     attribute.inConstructor = true;
 
     myClass.AddAttribute(attribute);
+    
+    UmlMethod method("public", "void", "moja_metoda1");
+    
+    myClass.AddMethod(method);
 
-    // 2. Aplikacja przygotowuje klasę
+    UmlAttribute attribute1("private", "string", "moja_zmienna2");
+    attribute1.generateGetter = false;
+    attribute1.generateSetter = true;
+    attribute1.inConstructor = true;
+
+    myClass.AddAttribute(attribute1);
+    
+    // 2. Prepare class for code generation
     UmlRefiner refiner;
+    refiner.applyConstructor(myClass);
     refiner.applyGettersSetters(myClass);
-    
 
-
-    // 3. Aplikacja generuje kod
-    std::cout << "\n--- GENERATOR ---" <<std::endl;
-    
+    // 3. Generate class code
     std::unique_ptr<generator::CodeGenerator> generator = nullptr;
     generator = std::make_unique<generator::CppGenerator>();
-
-    std::string code = generator->generateClassCode(myClass);
-    std::cout<<code<<std::endl;
+    
+    std::string cpp_code = generator->generateClassCode(myClass);
     
     generator = std::make_unique<generator::PythonGenerator>();
-    code = generator->generateClassCode(myClass);
-    std::cout<<code<<std::endl;
+    std::string python_code = generator->generateClassCode(myClass);
+    
+    // 4. Show results (future GUI)
+    std::cout << "\n--- GENERATORY ---" <<std::endl<<std::endl;
+    
+    std::cout << "--- python ---" <<std::endl;
+    std::cout<<python_code<<std::endl;
+    std::cout << "--- cpp ---" <<std::endl;
+    std::cout<<cpp_code<<std::endl;
 
-
+/*
     std::cout << "\n--- WYGENEROWANY KOD ---" <<std::endl;
     // myClass.GenerateCode();
     std::cout<<"Class"<<'\t';
@@ -56,20 +70,7 @@ int main() {
         std::cout<<'\t'<<method.visibility<<'\t'<<method.type<<'\t'<<method.name<<'\n';
     }
     std::cout<<std:: endl;
+*/
     
     return 0;
 }
-
-
-
-// class CodeGenerator {
-// // void GenerateCode() {
-// //     cout<<"class "<<GetName()<<" {\n";
-// //     cout<<"private: \n";
-// //     for (const UMLAttribute attribute : attributes) {
-// //         cout<<'\t'<<attribute.type<<" "<<attribute.name<<"\n";
-// //     }   
-// //     cout<<"}\n";
-// // }
-// };
-

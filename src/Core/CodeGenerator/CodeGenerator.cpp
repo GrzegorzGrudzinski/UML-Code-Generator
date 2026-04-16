@@ -1,5 +1,5 @@
 /*
-CodeGenerator.cpp
+    CodeGenerator.cpp
 */
 
 #include "CodeGenerator.hpp"
@@ -25,11 +25,16 @@ generateClassCode(const uml::UmlClass& uml_class) const {
     code += formatClassStart(uml_class.class_name) + class_start_char;
 
     // class body
+    bool first = true;
     for (const auto& vis : order) {
         bool hasAttrs = groupedAttributes.count(vis) > 0;
         bool hasMethods = groupedMethods.count(vis) > 0;
         if (!hasAttrs && !hasMethods) continue;
         
+        // add new line between visibility sections
+        if (!first) code += "\n";  // wierd in python...
+        first = false;
+
         code += formatVisibilitySection(vis);
 
         if (hasAttrs) {
@@ -39,19 +44,11 @@ generateClassCode(const uml::UmlClass& uml_class) const {
         }
         if (hasMethods) {
             for (const auto& method : groupedMethods.at(vis)) {
-                code += line_start_char + formatMethod(method) + line_end_char;
+                code += line_start_char + formatMethod(method) + "\n";
             }
         }
-
-        code += "\n";
+        // code += "\n";
     }
-
-    // for (const auto& attr : uml_class.attributes) {
-    //     code += formatAttribute(attr);
-    // }
-    // for (const auto& method : uml_class.methods) {
-    //     code += formatMethod(method);
-    // }
 
     code += formatClassEnd() + class_end_char;
 

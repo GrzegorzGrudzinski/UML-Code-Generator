@@ -1,5 +1,5 @@
 /*
-CppGenerator.hpp
+    CppGenerator.hpp
 */
 
 #pragma once
@@ -29,11 +29,30 @@ namespace generator
             return attr.type + " " + attr.name;
         }
 
+        
         std::string formatMethod(const uml::UmlMethod& method) const override {
-            std::string methodCode = method.type + " " + method.name + "()";
-            // methodCode += " {\n";
-            // methodCode += "\t\t// implementation\n";
-            // methodCode += "\t}\n";
+            // std::string methodCode = (method.type.empty() ? "" : method.type + " ") + method.name + "()";
+            std::string methodCode = "";
+
+            if (!method.isConstructor && !method.type.empty()) {
+               methodCode += method.type + " ";
+            }
+            methodCode += method.name + "(";
+
+            bool first = true;
+            for (const auto& param : method.parameters) {
+                if (!first) {
+                   methodCode += ", ";
+                }
+                methodCode += param.type + " " + param.name;
+                first = false;
+            }
+            methodCode += ")";
+            methodCode += " {\n";
+            methodCode += "\t\t// implementation\n";
+            methodCode += "\t}";
+
+
             return methodCode;
         }
 

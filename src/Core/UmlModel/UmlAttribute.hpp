@@ -1,3 +1,7 @@
+/*
+    UmlAttribute.hpp
+*/
+
 #pragma once
 
 #include <string>

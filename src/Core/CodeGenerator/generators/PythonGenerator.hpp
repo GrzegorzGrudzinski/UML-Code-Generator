@@ -31,10 +31,23 @@ namespace generator
         }
 
         std::string formatMethod(const uml::UmlMethod& method) const override {
-            std::string methodCode = "def " + method.name + "()" + ": " + method.type;
-            // methodCode += " {\n";
-            // methodCode += "\t\t// implementation\n";
-            // methodCode += "\t}\n";
+            std::string Name = method.isConstructor ? "__init__" : method.name;
+            
+            std::string methodCode = "def " + Name + "(self";
+            
+            for (const auto& param : method.parameters) {
+                methodCode += ", " + param.name + ": " + param.type;
+            }
+            methodCode += ")";
+
+            if (!method.isConstructor && !method.type.empty()) {
+                std::string retType = (method.type == "void") ? "None" : method.type;
+                methodCode += " -> " + retType;
+            }
+
+            methodCode += ":\n";
+            methodCode += "        pass"; // 8 spacji wcięcia
+
             return methodCode;
         }
 
