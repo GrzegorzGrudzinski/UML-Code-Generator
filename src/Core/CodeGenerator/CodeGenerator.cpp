@@ -56,3 +56,7 @@ generateClassCode(const uml::UmlClass& uml_class) const {
 };
 
 
+std::string generator::CodeGenerator::
+getGeneratorName() const {
+    return _lang;
+}

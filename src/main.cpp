@@ -1,5 +1,6 @@
 #include <iostream>
 #include <memory> // dla make_unique
+#include <vector>
 
 #include "UmlClass.hpp"
 #include "UmlRefiner.hpp"
@@ -38,39 +39,24 @@ int main() {
     refiner.applyGettersSetters(myClass);
 
     // 3. Generate class code
-    std::unique_ptr<generator::CodeGenerator> generator = nullptr;
-    generator = std::make_unique<generator::CppGenerator>();
+    std::vector<std::unique_ptr<generator::CodeGenerator>> generators;
+    std::unique_ptr<generator::CodeGenerator> generic_generator = nullptr;
+
+    generic_generator = std::make_unique<generator::CppGenerator>();
+    generators.push_back(std::move(generic_generator));
+    // std::string cpp_code = generator->generateClassCode(myClass);
     
-    std::string cpp_code = generator->generateClassCode(myClass);
-    
-    generator = std::make_unique<generator::PythonGenerator>();
-    std::string python_code = generator->generateClassCode(myClass);
+    generic_generator = std::make_unique<generator::PythonGenerator>();
+    generators.push_back(std::move(generic_generator));
+    // std::string python_code = generator->generateClassCode(myClass);
     
     // 4. Show results (future GUI)
     std::cout << "\n--- GENERATORY ---" <<std::endl<<std::endl;
     
-    std::cout << "--- python ---" <<std::endl;
-    std::cout<<python_code<<std::endl;
-    std::cout << "--- cpp ---" <<std::endl;
-    std::cout<<cpp_code<<std::endl;
-
-/*
-    std::cout << "\n--- WYGENEROWANY KOD ---" <<std::endl;
-    // myClass.GenerateCode();
-    std::cout<<"Class"<<'\t';
-    std::cout<<myClass.class_name<<std:: endl;
-    
-    std::cout<<"Attributes"<<std:: endl;
-    for (auto attr : myClass.attributes) {
-        std::cout<<'\t'<<attr.visibility<<'\t'<<attr.type<<'\t'<<attr.name<<'\n';
+    for (const auto& generator : generators){
+        std::cout << "--- " << generator->getGeneratorName() << " ---" <<std::endl;
+        std::cout << generator->generateClassCode(myClass) <<std::endl<<std::endl;
     }
-    
-    std::cout<<"\nMethods"<<std:: endl;
-    for (auto method : myClass.methods) {
-        std::cout<<'\t'<<method.visibility<<'\t'<<method.type<<'\t'<<method.name<<'\n';
-    }
-    std::cout<<std:: endl;
-*/
-    
+   
     return 0;
 }

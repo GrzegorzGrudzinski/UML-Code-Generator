@@ -15,10 +15,13 @@ namespace generator
     class CodeGenerator {
     public:
         std::string generateClassCode(const uml::UmlClass& uml_class) const;
-    
+        std::string getGeneratorName() const;
+        
         virtual ~CodeGenerator() = default;
 
     protected:
+        std::string _lang = "generic";
+
         std::string class_start_char = "\n";
         std::string class_end_char = "\n";
         

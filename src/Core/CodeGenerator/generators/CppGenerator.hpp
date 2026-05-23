@@ -12,10 +12,13 @@ namespace generator
     class CppGenerator : public CodeGenerator {
     public:
         CppGenerator() {
+            _lang = "cpp";
+
             class_start_char = " {\n";
             class_end_char = "};\n";  
             line_end_char = ";\n";   
         }
+        
     protected:
         std::string formatClassStart(const std::string& name) const override {
             return "class " + name;
@@ -59,6 +62,7 @@ namespace generator
         std::string formatClassEnd() const override {
             return ""; 
         }
+
     };
 
 } // namespace generator

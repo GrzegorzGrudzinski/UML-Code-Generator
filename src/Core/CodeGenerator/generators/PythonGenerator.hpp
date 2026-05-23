@@ -12,6 +12,8 @@ namespace generator
     class PythonGenerator : public CodeGenerator {
     public:
         PythonGenerator() {
+            _lang = "python";
+
             class_start_char = ":\n";
             class_end_char = "";  
             line_start_char = "    ";   
