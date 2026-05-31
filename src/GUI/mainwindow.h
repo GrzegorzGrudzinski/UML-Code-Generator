@@ -17,6 +17,9 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
+private slots:
+    void handleGenerateClick(); 
+    
 private:
     Ui::MainWindow *ui;
 };
