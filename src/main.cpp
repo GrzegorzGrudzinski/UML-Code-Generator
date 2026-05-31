@@ -2,16 +2,18 @@
 #include <memory> // dla make_unique
 #include <vector>
 
+#include <QApplication>
+#include "mainwindow.h"
+
 #include "UmlClass.hpp"
 #include "UmlRefiner.hpp"
-#include "CodeGenerator.hpp"
+// #include "CodeGenerator.hpp"
 
-#include "generators/CppGenerator.hpp"
-#include "generators/PythonGenerator.hpp"
+#include "generators.h"
 
 using namespace uml;
 
-int main() {
+int main(int argc, char *argv[]) {
     // 1. Create class
     UmlClass myClass("moja_klasa");
 
@@ -57,6 +59,12 @@ int main() {
         std::cout << "--- " << generator->getGeneratorName() << " ---" <<std::endl;
         std::cout << generator->generateClassCode(myClass) <<std::endl<<std::endl;
     }
-   
+    ///////////////
+
+    QApplication app(argc, argv);
+    MainWindow window;
+    window.show();
+    return app.exec();
+
     return 0;
 }
