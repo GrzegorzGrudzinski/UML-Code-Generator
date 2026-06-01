@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QGraphicsScene>
+// #include <QGraphicsItem>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,8 +21,11 @@ public:
 
 private slots:
     void handleGenerateClick(); 
+    void handleAddClassOnScene();
     
 private:
     Ui::MainWindow *ui;
+
+    QGraphicsScene *mainScene;
 };
 #endif // MAINWINDOW_H

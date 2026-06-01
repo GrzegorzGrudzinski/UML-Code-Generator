@@ -5,16 +5,7 @@
 #include <QApplication>
 #include "mainwindow.h"
 
-#include "UmlClass.hpp"
-#include "UmlRefiner.hpp"
-// #include "CodeGenerator.hpp"
-
-#include "generators.h"
-
-using namespace uml;
-
-int main(int argc, char *argv[]) {
-    
+int main(int argc, char *argv[]) {  
     ///////////////
 
     QApplication app(argc, argv);

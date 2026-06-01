@@ -1,10 +1,14 @@
+/*
+    mainwindow.cpp
+*/
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "UmlClassItem.hpp"
+
 //
 #include "UmlClass.hpp"
-#include "UmlAttribute.hpp"
-#include "UmlMethod.hpp"
 #include "UmlRefiner.hpp"
 #include "generators.h" // Zmień na odpowiednią nazwę pliku, jeśli jest inna
 
@@ -16,8 +20,21 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    // ui->outputWindow->setStyleSheet // for output text
 
-    connect(ui->generateCodeButton, &QPushButton::clicked, this, &MainWindow::handleGenerateClick);
+    //
+    mainScene = new QGraphicsScene(this);
+    mainScene->setSceneRect(-2500, -2500, 5000, 5000);
+
+    ui->graphicsView->setScene(mainScene);
+    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+    
+    ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
+    ui->graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+    
+    //
+    connect(ui->generateCodeBtn, &QPushButton::clicked, this, &MainWindow::handleGenerateClick);
+    connect(ui->addClassBtn, &QPushButton::clicked, this, &MainWindow::handleAddClassOnScene);
 }
 
 MainWindow::~MainWindow()
@@ -25,9 +42,23 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+using namespace uml;
+
+
 //
-void MainWindow::handleGenerateClick() 
+void MainWindow::handleAddClassOnScene()
 {
+    // add class
+    UmlClassItem* newClassItem = new UmlClassItem("NowaKlasa");
+    
+    // add attribute
+    newClassItem->addAttribute(uml::UmlAttribute("private", "int", "testVar"));
+    
+    // Wrzucamy bloczek na płótno!
+    mainScene->addItem(newClassItem);
+}
+
+/*
     // 1. Create class
     uml::UmlClass myClass("moja_klasa");
 
@@ -54,26 +85,43 @@ void MainWindow::handleGenerateClick()
     refiner.applyConstructor(myClass);
     refiner.applyGettersSetters(myClass);
 
-    // 3. Generate class code
+*/
+//
+void MainWindow::handleGenerateClick() 
+{
+    ui->outputWindow->clear();
+    std::string output = "\t--- WYGENEROWANY KOD ---\n";
+
+    // 1. Initialize the generators
     std::vector<std::unique_ptr<generator::CodeGenerator>> generators;
     std::unique_ptr<generator::CodeGenerator> generic_generator = nullptr;
+    generators.push_back(std::make_unique<generator::CppGenerator>());
+    generators.push_back( std::make_unique<generator::PythonGenerator>());
+    
+    bool foundAnyClass = false;
+    for (QGraphicsItem* item : mainScene->items()) {
+        UmlClassItem* umlItem = dynamic_cast<UmlClassItem*>(item);
+        if (umlItem != nullptr) {
+            foundAnyClass = true;
 
-    generic_generator = std::make_unique<generator::CppGenerator>();
-    generators.push_back(std::move(generic_generator));
-    // std::string cpp_code = generator->generateClassCode(myClass);
-    
-    generic_generator = std::make_unique<generator::PythonGenerator>();
-    generators.push_back(std::move(generic_generator));
-    // std::string python_code = generator->generateClassCode(myClass);
-    
-    // 4. Show results 
-    std::string output = "\t--- GENERATORY ---\n";
-    for (const auto& generator : generators){
-        output += "\t--- " + generator->getGeneratorName() + " ---\n"; 
-        output += generator->generateClassCode(myClass) ;
+            // 
+            uml::UmlClass classToGenerate = umlItem->getBackendClass();
+
+            // prepare the class for generation
+            uml::UmlRefiner refiner;
+            refiner.applyConstructor(classToGenerate);
+            refiner.applyGettersSetters(classToGenerate);
+
+            for (const auto& generator : generators){
+                output += "\n--- " + generator->getGeneratorName() + " ---\n"; 
+                output += generator->generateClassCode(classToGenerate) ;
+            }
+            output += "// ========================================\n\n";
+        }
+        if (!foundAnyClass) {
+           output = "Brak klas do wygenerowania!";
+        }
     }
 
-    QString textToShow = QString::fromStdString(output);
-
-    ui->outputWindow->setPlainText(textToShow);
+    ui->outputWindow->setPlainText(QString::fromStdString(output));
 }

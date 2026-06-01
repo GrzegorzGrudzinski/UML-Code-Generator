@@ -27,7 +27,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="generateCodeButton">
+   <widget class="QPushButton" name="generateCodeBtn">
     <property name="geometry">
      <rect>
       <x>520</x>
@@ -48,6 +48,19 @@
       <width>501</width>
       <height>571</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="addClassBtn">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>101</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Add Class</string>
     </property>
    </widget>
   </widget>
