@@ -5,6 +5,8 @@
 #include <QGraphicsScene>
 // #include <QGraphicsItem>
 
+#include "UmlClassItem.hpp"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -20,12 +22,18 @@ public:
     ~MainWindow() override;
 
 private slots:
-    void handleGenerateClick(); 
     void handleAddClassOnScene();
+    void handleGenerateClick(); 
+    void handleSelectionChanged(); 
+    void handleUpdateClassName();
+    void handleAddAttribute();
+    void handleAddMethod();
     
 private:
     Ui::MainWindow *ui;
 
     QGraphicsScene *mainScene;
+
+    UmlClassItem* currentSelectedItem = nullptr;
 };
 #endif // MAINWINDOW_H

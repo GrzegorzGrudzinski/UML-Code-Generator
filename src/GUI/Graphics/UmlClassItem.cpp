@@ -29,22 +29,22 @@ UmlClassItem::UmlClassItem(const std::string& className, QGraphicsItem* parent)
     contentText->setDefaultTextColor(Qt::black);
 }
 
+
+void UmlClassItem::setClassName(const std::string& newName) {
+    backendClass.class_name = newName;
+    
+    titleText->setPlainText(QString::fromStdString(newName));
+    updateVisuals(); 
+}
+
 void UmlClassItem::addAttribute(const uml::UmlAttribute& attr) {
     backendClass.AddAttribute(attr); 
     updateVisuals();                 
 }
-
-void UmlClassItem::setClassName(const std::string& newName) {
-    // Zakładam, że w UmlClass masz metodę setName()
-    backendClass.class_name = newName;
-    
-    // Aktualizujemy napis na ekranie
-    titleText->setPlainText(QString::fromStdString(newName));
-    
-    // Opcjonalnie wyśrodkowanie lub odświeżenie ramki
-    updateVisuals(); 
+void UmlClassItem::addMethod(const uml::UmlMethod& method) {
+    backendClass.AddMethod(method); 
+    updateVisuals();                 
 }
-
 
 void UmlClassItem::updateVisuals() {
     QString content = "";
@@ -54,8 +54,19 @@ void UmlClassItem::updateVisuals() {
         content += visibility + " " + QString::fromStdString(attr.name + " : " + attr.type ) + "\n";
     }
     
+    // separate attributes and methods (if there are both)
+    if (!backendClass.attributes.empty() && !backendClass.methods.empty() ) {
+        content += "-------------------\n";
+    }
+    
+    for (const auto& method : backendClass.methods ) {
+        QString visibility = method.visibility == "public" ? "+" : "-";
+        content += visibility + " " + QString::fromStdString(method.name + " : " + method.type ) + "\n";
+    }
+    
+
     contentText->setPlainText(content);
     
-    // Dynamicznie powiększa ramkę, gdy dodajesz dużo zmiennych
-    setRect(0, 0, 150, 50 + contentText->boundingRect().height());
+    int dynamicHeight = 50 + contentText->boundingRect().height();
+    setRect(0, 0, 150, dynamicHeight < 60 ? 60 : dynamicHeight);
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>946</width>
-    <height>682</height>
+    <width>1920</width>
+    <height>1080</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,10 +17,10 @@
    <widget class="QPlainTextEdit" name="outputWindow">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>50</y>
-      <width>371</width>
-      <height>571</height>
+      <x>10</x>
+      <y>710</y>
+      <width>900</width>
+      <height>300</height>
      </rect>
     </property>
     <property name="readOnly">
@@ -30,10 +30,10 @@
    <widget class="QPushButton" name="generateCodeBtn">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>10</y>
-      <width>101</width>
-      <height>34</height>
+      <x>590</x>
+      <y>660</y>
+      <width>321</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
@@ -45,31 +45,218 @@
      <rect>
       <x>10</x>
       <y>50</y>
-      <width>501</width>
-      <height>571</height>
+      <width>571</width>
+      <height>651</height>
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="addClassBtn">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>101</width>
-      <height>34</height>
+      <x>590</x>
+      <y>51</y>
+      <width>321</width>
+      <height>601</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Add Class</string>
-    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="addClassBtn">
+       <property name="text">
+        <string>Add Class</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Class name</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="classNameEdit"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="updateClassBtn">
+       <property name="text">
+        <string>Update class name</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Attributes</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="attrList"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="attrNameEdit">
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="attrTypeEdit">
+       <property name="text">
+        <string>Type</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="attrVisibilityList">
+       <item>
+        <property name="text">
+         <string>visibility</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>private</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>public</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>protected</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="addAttrBtn">
+         <property name="text">
+          <string>Add attribute</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="removeAttrBtn">
+         <property name="text">
+          <string>Remove attribute</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Methods</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="methodList"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="methodNameEdit">
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="methodTypeEdit">
+       <property name="text">
+        <string>Type</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="methodVisibilityList">
+       <item>
+        <property name="text">
+         <string>visibility</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>private</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>public</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>protected</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QPushButton" name="addMethodBtn">
+         <property name="text">
+          <string>Add method</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="removeMethodBtn">
+         <property name="text">
+          <string>Add method</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </widget>
+   <zorder>layoutWidget</zorder>
+   <zorder>graphicsView</zorder>
+   <zorder>outputWindow</zorder>
+   <zorder>generateCodeBtn</zorder>
+   <zorder>addAttrBtn</zorder>
+   <zorder>removeAttrBtn</zorder>
+   <zorder>removeMethodBtn</zorder>
+   <zorder>addMethodBtn</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>946</width>
+     <width>1920</width>
      <height>30</height>
     </rect>
    </property>
