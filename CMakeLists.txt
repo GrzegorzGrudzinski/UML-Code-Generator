@@ -26,6 +26,11 @@ set(GUI_SOURCES
     src/GUI/mainwindow.cpp
     src/GUI/mainwindow.ui
     src/GUI/Graphics/UmlClassItem.cpp  
+
+    src/GUI/mainwindow_class.cpp
+    src/GUI/mainwindow_attributes.cpp
+    src/GUI/mainwindow_methods.cpp
+    src/GUI/mainwindow_generator.cpp
 )
 
 # Główny plik startowy
