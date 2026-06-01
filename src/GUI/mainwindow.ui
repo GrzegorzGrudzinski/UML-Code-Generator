@@ -108,7 +108,13 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="attrList"/>
+      <widget class="QComboBox" name="attrList">
+       <item>
+        <property name="text">
+         <string>New attribute</string>
+        </property>
+       </item>
+      </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="attrNameEdit">
@@ -182,7 +188,13 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="methodList"/>
+      <widget class="QComboBox" name="methodList">
+       <item>
+        <property name="text">
+         <string>New method</string>
+        </property>
+       </item>
+      </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="methodNameEdit">
@@ -246,10 +258,6 @@
    <zorder>graphicsView</zorder>
    <zorder>outputWindow</zorder>
    <zorder>generateCodeBtn</zorder>
-   <zorder>addAttrBtn</zorder>
-   <zorder>removeAttrBtn</zorder>
-   <zorder>removeMethodBtn</zorder>
-   <zorder>addMethodBtn</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

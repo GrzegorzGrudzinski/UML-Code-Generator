@@ -22,12 +22,24 @@ public:
     ~MainWindow() override;
 
 private slots:
-    void handleAddClassOnScene();
     void handleGenerateClick(); 
     void handleSelectionChanged(); 
+    
+    void handleAddClassOnScene();
     void handleUpdateClassName();
+    
+    
     void handleAddAttribute();
+    void refreshAttrList();                 
+    void handleAttrSelection(int currentRow); 
+    void handleEditAttribute();             
+    void handleDeleteAttribute();           
+    
     void handleAddMethod();
+    void refreshMethodList();                 
+    void handleMethodSelection(int currentRow); 
+    void handleEditMethod();             
+    void handleDeleteMethod();           
     
 private:
     Ui::MainWindow *ui;

@@ -37,14 +37,46 @@ void UmlClassItem::setClassName(const std::string& newName) {
     updateVisuals(); 
 }
 
+
 void UmlClassItem::addAttribute(const uml::UmlAttribute& attr) {
     backendClass.AddAttribute(attr); 
     updateVisuals();                 
 }
+
+void UmlClassItem::updateAttribute(int index, const uml::UmlAttribute& newAttr) {
+    if (index >= 0 && index < backendClass.attributes.size()) {
+        backendClass.attributes[index] = newAttr; 
+        updateVisuals();                          
+    }
+}
+
+void UmlClassItem::removeAttribute(int index) {
+    if (index >= 0 && index < backendClass.attributes.size()) {
+        backendClass.attributes.erase(backendClass.attributes.begin() + index); 
+        updateVisuals();
+    }
+}
+
+
 void UmlClassItem::addMethod(const uml::UmlMethod& method) {
     backendClass.AddMethod(method); 
     updateVisuals();                 
 }
+
+void UmlClassItem::updateMethod(int index, const uml::UmlMethod& newMethod) {
+    if (index >= 0 && index < backendClass.methods.size()) {
+        backendClass.methods[index] = newMethod; 
+        updateVisuals();                          
+    }
+}
+void UmlClassItem::removeMethod(int index) {
+    if (index >= 0 && index < backendClass.methods.size()) {
+        backendClass.methods.erase(backendClass.methods.begin() + index); 
+        updateVisuals();
+    }
+}
+
+
 
 void UmlClassItem::updateVisuals() {
     QString content = "";

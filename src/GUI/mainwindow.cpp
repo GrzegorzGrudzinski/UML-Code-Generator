@@ -37,10 +37,21 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->addClassBtn, &QPushButton::clicked, this, &MainWindow::handleAddClassOnScene);
     connect(mainScene, &QGraphicsScene::selectionChanged, this, &MainWindow::handleSelectionChanged);
     
-    // Sygnały od panelu bocznego (upewnij się, że dodałeś te przyciski w Qt Designerze!)
     connect(ui->updateClassBtn, &QPushButton::clicked, this, &MainWindow::handleUpdateClassName);
+    
     connect(ui->addAttrBtn, &QPushButton::clicked, this, &MainWindow::handleAddAttribute);
+    connect(ui->removeAttrBtn, &QPushButton::clicked, this, &MainWindow::handleDeleteAttribute);
+    connect(ui->attrList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::handleAttrSelection);
+    // connect(ui->attrVisibilityList, &QComboBox::currentTextChanged, this, &MainWindow::handleAVisibilitySelection);
+    
     connect(ui->addMethodBtn, &QPushButton::clicked, this, &MainWindow::handleAddMethod);
+    connect(ui->removeMethodBtn, &QPushButton::clicked, this, &MainWindow::handleDeleteMethod);
+    connect(ui->methodList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::handleMethodSelection);
+    // connect(ui->methodVisibilityList, &QComboBox::currentTextChanged, this, &MainWindow::handleMVisibilitySelection);
+    
+
+    // connect(ui->editAttrBtn, &QPushButton::clicked, this, &MainWindow::handleEditAttribute);
+
 }
 
 MainWindow::~MainWindow()
@@ -54,8 +65,20 @@ void MainWindow::handleSelectionChanged()
     auto selectedItems = mainScene->selectedItems();
 
     if (selectedItems.isEmpty()) {
+        // clears when background is clicked        
         currentSelectedItem = nullptr;
-        ui->classNameEdit->clear(); // clears when background is clicked
+        ui->classNameEdit->clear();
+
+        ui->attrList->clear();
+        ui->attrNameEdit->clear();
+        ui->attrTypeEdit->clear();
+        ui->attrVisibilityList->clear();
+
+        ui->methodList->clear();
+        ui->methodNameEdit->clear();
+        ui->methodTypeEdit->clear();
+        ui->methodVisibilityList->clear();
+
         return; 
     }
 
@@ -64,6 +87,9 @@ void MainWindow::handleSelectionChanged()
     if (currentSelectedItem != nullptr) {
         std::string className = currentSelectedItem->getBackendClass().GetName();
         ui->classNameEdit->setText(QString::fromStdString(className));
+
+        refreshAttrList(); 
+        refreshMethodList(); 
     }
 }
 
@@ -136,6 +162,8 @@ void MainWindow::handleAddAttribute()
     // clear when added
     ui->attrTypeEdit->clear();
     ui->attrNameEdit->clear();
+
+    refreshAttrList();
 }
 
 void MainWindow::handleAddMethod()
@@ -151,7 +179,132 @@ void MainWindow::handleAddMethod()
 
     ui->methodTypeEdit->clear();
     ui->methodNameEdit->clear();
+
+    refreshMethodList();
 }
+
+
+void MainWindow::refreshAttrList() {
+    ui->attrList->blockSignals(true); 
+    ui->attrList->clear(); 
+    
+    if (currentSelectedItem != nullptr) {
+        for (const auto& attr : currentSelectedItem->getBackendClass().attributes) {
+            QString itemText = QString::fromStdString(attr.visibility + " " + attr.type + " " + attr.name);
+            ui->attrList->addItem(itemText);
+        }
+    }
+    
+    ui->attrList->blockSignals(false); 
+
+    if (ui->attrList->count() > 0) {
+        handleAttrSelection(0);
+    }
+}
+
+void MainWindow::refreshMethodList() {
+    ui->methodList->blockSignals(true); 
+    ui->methodList->clear(); 
+    
+    if (currentSelectedItem != nullptr) {
+        for (const auto& method : currentSelectedItem->getBackendClass().methods) {
+            QString itemText = QString::fromStdString(method.visibility + " " + method.type + " " + method.name + "()");
+            ui->methodList->addItem(itemText);
+        }
+    }
+    
+    ui->methodList->blockSignals(false); 
+
+    if (ui->methodList->count() > 0) {
+        handleMethodSelection(0);
+    }
+}
+
+
+void MainWindow::handleAttrSelection(int index) {
+    if (currentSelectedItem == nullptr || index < 0) return;
+
+    auto attr = currentSelectedItem->getBackendClass().attributes[index];
+
+    ui->attrTypeEdit->setText(QString::fromStdString(attr.type));
+    ui->attrNameEdit->setText(QString::fromStdString(attr.name));
+    
+    // ui->attrVisibilityList->setCurrentText(QString::fromStdString(attr.visibility));
+}
+
+void MainWindow::handleEditAttribute() {
+    if (currentSelectedItem == nullptr) return;
+    
+    int index = ui->attrList->currentIndex(); 
+    if (index < 0) return; 
+
+    QString newType = ui->attrTypeEdit->text();
+    QString newName = ui->attrNameEdit->text();
+    if (newType.isEmpty() || newName.isEmpty()) return;
+
+    uml::UmlAttribute updatedAttr("private", newType.toStdString(), newName.toStdString());
+    currentSelectedItem->updateAttribute(index, updatedAttr);
+    
+    refreshAttrList(); 
+}
+
+void MainWindow::handleDeleteAttribute() {
+    if (currentSelectedItem == nullptr) return;
+    
+    int index = ui->attrList->currentIndex();
+    if (index < 0) return;
+
+    currentSelectedItem->removeAttribute(index);
+    
+    ui->attrTypeEdit->clear();
+    ui->attrNameEdit->clear();
+    refreshAttrList(); 
+}
+///////////
+
+void MainWindow::handleMethodSelection(int index) {
+    if (currentSelectedItem == nullptr || index < 0) return;
+
+    auto method = currentSelectedItem->getBackendClass().methods[index];
+
+    ui->methodTypeEdit->setText(QString::fromStdString(method.type));
+    ui->methodNameEdit->setText(QString::fromStdString(method.name));
+    
+    // ui->methodVisibilityList->setCurrentText(QString::fromStdString(method.visibility));
+}
+
+void MainWindow::handleEditMethod() {
+    if (currentSelectedItem == nullptr) return;
+    
+    int index = ui->methodList->currentIndex(); 
+    if (index < 0) return; 
+
+    QString newType = ui->methodTypeEdit->text();
+    QString newName = ui->methodNameEdit->text();
+    if (newType.isEmpty() || newName.isEmpty()) return;
+
+    uml::UmlMethod updatedMethod("private", newType.toStdString(), newName.toStdString());
+    currentSelectedItem->updateMethod(index, updatedMethod);
+    
+    refreshMethodList(); 
+}
+
+void MainWindow::handleDeleteMethod() {
+    if (currentSelectedItem == nullptr) return;
+    
+    int index = ui->methodList->currentIndex();
+    if (index < 0) return;
+
+    currentSelectedItem->removeMethod(index);
+    
+    ui->methodTypeEdit->clear();
+    ui->methodNameEdit->clear();
+    refreshMethodList(); 
+}
+
+
+
+///////////////
 
 
 
