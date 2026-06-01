@@ -154,9 +154,12 @@ void MainWindow::handleAddAttribute()
 
     QString nameInput = ui->attrNameEdit->text();
     QString typeInput = ui->attrTypeEdit->text();
+    QString visibilityInput = ui->attrVisibilityList->currentText();
+    
+    if (visibilityInput == "visibility") visibilityInput = "private"; 
     if (typeInput.isEmpty() || nameInput.isEmpty()) return;
 
-    uml::UmlAttribute newAttr("private", typeInput.toStdString(), nameInput.toStdString());
+    uml::UmlAttribute newAttr(visibilityInput.toStdString(), typeInput.toStdString(), nameInput.toStdString());
     currentSelectedItem->addAttribute(newAttr);
 
     // clear when added
@@ -165,24 +168,6 @@ void MainWindow::handleAddAttribute()
 
     refreshAttrList();
 }
-
-void MainWindow::handleAddMethod()
-{
-    if (currentSelectedItem == nullptr) return;
-
-    QString typeInput = ui->methodTypeEdit->text();
-    QString nameInput = ui->methodNameEdit->text();
-    if (typeInput.isEmpty() || nameInput.isEmpty()) return;
-
-    uml::UmlMethod newMethod("public", typeInput.toStdString(), nameInput.toStdString());
-    currentSelectedItem->addMethod(newMethod);
-
-    ui->methodTypeEdit->clear();
-    ui->methodNameEdit->clear();
-
-    refreshMethodList();
-}
-
 
 void MainWindow::refreshAttrList() {
     ui->attrList->blockSignals(true); 
@@ -229,7 +214,7 @@ void MainWindow::handleAttrSelection(int index) {
     ui->attrTypeEdit->setText(QString::fromStdString(attr.type));
     ui->attrNameEdit->setText(QString::fromStdString(attr.name));
     
-    // ui->attrVisibilityList->setCurrentText(QString::fromStdString(attr.visibility));
+    ui->attrVisibilityList->setCurrentText(QString::fromStdString(attr.visibility));
 }
 
 void MainWindow::handleEditAttribute() {
@@ -240,7 +225,10 @@ void MainWindow::handleEditAttribute() {
 
     QString newType = ui->attrTypeEdit->text();
     QString newName = ui->attrNameEdit->text();
+    QString newVisibility = ui->attrVisibilityList->currentText();
+    
     if (newType.isEmpty() || newName.isEmpty()) return;
+    if (newVisibility == "visibility") newVisibility = "private";
 
     uml::UmlAttribute updatedAttr("private", newType.toStdString(), newName.toStdString());
     currentSelectedItem->updateAttribute(index, updatedAttr);
@@ -260,7 +248,28 @@ void MainWindow::handleDeleteAttribute() {
     ui->attrNameEdit->clear();
     refreshAttrList(); 
 }
+
 ///////////
+
+void MainWindow::handleAddMethod()
+{
+    if (currentSelectedItem == nullptr) return;
+
+    QString typeInput = ui->methodTypeEdit->text();
+    QString nameInput = ui->methodNameEdit->text();
+    QString visibilityInput = ui->methodVisibilityList->currentText();
+    
+    if (visibilityInput == "visibility") visibilityInput = "private"; 
+    if (typeInput.isEmpty() || nameInput.isEmpty()) return;
+
+    uml::UmlMethod newMethod(visibilityInput.toStdString(), typeInput.toStdString(), nameInput.toStdString());
+    currentSelectedItem->addMethod(newMethod);
+
+    ui->methodTypeEdit->clear();
+    ui->methodNameEdit->clear();
+
+    refreshMethodList();
+}
 
 void MainWindow::handleMethodSelection(int index) {
     if (currentSelectedItem == nullptr || index < 0) return;
@@ -270,7 +279,7 @@ void MainWindow::handleMethodSelection(int index) {
     ui->methodTypeEdit->setText(QString::fromStdString(method.type));
     ui->methodNameEdit->setText(QString::fromStdString(method.name));
     
-    // ui->methodVisibilityList->setCurrentText(QString::fromStdString(method.visibility));
+    ui->methodVisibilityList->setCurrentText(QString::fromStdString(method.visibility));
 }
 
 void MainWindow::handleEditMethod() {
@@ -281,6 +290,9 @@ void MainWindow::handleEditMethod() {
 
     QString newType = ui->methodTypeEdit->text();
     QString newName = ui->methodNameEdit->text();
+    QString newVisibility = ui->methodVisibilityList->currentText();
+
+    if (newVisibility == "visibility") newVisibility = "private";
     if (newType.isEmpty() || newName.isEmpty()) return;
 
     uml::UmlMethod updatedMethod("private", newType.toStdString(), newName.toStdString());
