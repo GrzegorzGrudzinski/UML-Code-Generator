@@ -82,4 +82,14 @@ void MainWindow::handleGenerateClick()
     refiner.applyConstructor(myClass);
     refiner.applyGettersSetters(myClass);
 
+    // 3. Generate code
+    std::string output = "\t--- WYGENEROWANY KOD ---\n";
+    for (const auto& generator : generators){
+        output += "\n--- " + generator->getGeneratorName() + " ---\n"; 
+        output += generator->generateClassCode(classToGenerate) ;
+    }
+    output += "// ========================================\n\n";
+
+    std::cout<<output<<endl;
+
 */
